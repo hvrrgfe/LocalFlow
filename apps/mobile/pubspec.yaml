@@ -1,0 +1,43 @@
+name: localflow
+description: LocalFlow - Local-first AI Agent & Workflow for Android
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.4.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # State management
+  provider: ^6.1.2
+  # Local database (mirrors Rust SQLite schema)
+  sqflite: ^2.3.3
+  path_provider: ^2.1.4
+  # HTTP for model API calls
+  http: ^1.2.2
+  # Secure storage (wraps Android Keystore)
+  flutter_secure_storage: ^9.2.2
+  # JSON serialization
+  json_annotation: ^4.9.0
+  # UUID generation (matches Rust Uuid)
+  uuid: ^4.5.1
+  # Intl for date formatting
+  intl: ^0.19.0
+  # File management for export/import
+  file_picker: ^8.1.6
+  share_plus: ^10.1.4
+  # Connectivity monitoring
+  connectivity_plus: ^6.0.5
+  # YAML parsing for OpenAPI
+  yaml: ^3.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  json_serializable: ^6.8.0
+  build_runner: ^2.4.12
+
+flutter:
+  uses-material-design: true

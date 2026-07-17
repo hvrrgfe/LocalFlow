@@ -1,0 +1,55 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace "com.localflow.app"
+    compileSdk 34
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        applicationId "com.localflow.app"
+        minSdk 26  // Android 8.0+ (required for Keystore AES-GCM)
+        targetSdk 34
+        versionCode 1
+        versionName "0.1.0"
+
+        // No NDK abiFilters - Rust FFI not yet integrated
+    }
+
+    buildTypes {
+        release {
+            // Disable debug symbols
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Signing config - see build_apk.md for instructions
+            // signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    // Android Keystore (included via flutter_secure_storage)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}

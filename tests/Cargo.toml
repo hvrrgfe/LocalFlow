@@ -1,0 +1,19 @@
+﻿[package]
+name = "localflow-tests"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Integration tests for LocalFlow"
+publish = false
+
+[dependencies]
+localflow-core = { path = "../crates/core" }
+localflow-storage = { path = "../crates/storage" }
+localflow-secret-vault = { path = "../crates/secret-vault" }
+localflow-security = { path = "../crates/security" }
+localflow-audit = { path = "../crates/audit" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tempfile = "3"

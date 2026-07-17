@@ -1,0 +1,17 @@
+﻿[package]
+name = "localflow-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Core data models, error types, state machine, and logging for LocalFlow"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["json", "env-filter"] }
+regex = "1"
+schemars = { version = "0.8", optional = true }

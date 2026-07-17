@@ -1,0 +1,19 @@
+﻿[workspace]
+resolver = "3"
+members = [
+    "crates/core",
+    "crates/storage",
+    "crates/secret-vault",
+    "crates/security",
+    "crates/audit",
+    "crates/workflow-engine",
+    "crates/model-providers",
+    "crates/api-tools",
+    "apps/desktop/src-tauri",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "LocalFlow - A local-first AI Agent and workflow orchestration tool"

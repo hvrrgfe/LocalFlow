@@ -1,0 +1,30 @@
+[package]
+name = "localflow-workflow-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Workflow execution engine for LocalFlow - DAG-based node execution"
+
+[dependencies]
+localflow-core = { path = "../core" }
+localflow-storage = { path = "../storage" }
+localflow-secret-vault = { path = "../secret-vault" }
+localflow-security = { path = "../security" }
+localflow-audit = { path = "../audit" }
+localflow-model-providers = { path = "../model-providers" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "2"
+tracing = "0.1"
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json"] }
+async-trait = "0.1"
+futures = "0.3"
+regex = "1"
+url = "2"
+
+[dev-dependencies]
+wiremock = "0.6"
+localflow-security = { path = "../security" }

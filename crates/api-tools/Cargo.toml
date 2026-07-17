@@ -1,0 +1,13 @@
+﻿[package]
+name = "localflow-api-tools"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "OpenAPI and custom HTTP API tool definitions for LocalFlow"
+
+[dependencies]
+localflow-core = { path = "../core" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+tracing = "0.1"

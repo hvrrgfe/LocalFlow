@@ -1,0 +1,9 @@
+{
+  "identifier": "default",
+  "description": "Default capabilities for LocalFlow",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:allow-open"
+  ]
+}
