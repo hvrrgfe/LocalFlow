@@ -1,13 +1,14 @@
-mod commands;
+﻿mod commands;
 
-use localflow_secret_vault::InMemoryVault;
+use localflow_secret_vault::{EncryptedFileVault, SecretVault};
 use localflow_storage::StorageEngine;
 use std::sync::Arc;
+use tauri::Manager;
 
 /// Application state shared across Tauri commands.
 pub struct AppState {
     pub storage: StorageEngine,
-    pub vault: Arc<InMemoryVault>,
+    pub vault: Arc<dyn SecretVault>,
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -19,15 +20,37 @@ pub fn run() {
         )
         .init();
 
-    let storage = StorageEngine::new_in_memory().expect("Failed to initialize storage");
-
-    let vault = Arc::new(InMemoryVault::with_test_secrets());
-
-    let app_state = AppState { storage, vault };
-
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .manage(app_state)
+        .setup(|app| {
+            // Resolve app data directory for persistent storage
+            let app_data_dir = app.path().app_data_dir().expect("failed to resolve app data dir");
+            tracing::info!("App data directory: {}", app_data_dir.display());
+
+            std::fs::create_dir_all(&app_data_dir)
+                .expect("failed to create app data directory");
+
+            // Persistent SQLite database
+            let db_path = app_data_dir.join("localflow.db");
+            let storage = StorageEngine::new(
+                db_path.to_str().expect("invalid db path"),
+            )
+            .expect("Failed to initialize storage");
+
+            // Encrypted file vault for secrets
+            let vault_dir = app_data_dir.join("vault");
+            let vault = Arc::new(
+                EncryptedFileVault::new(&vault_dir)
+                    .expect("Failed to initialize encrypted vault"),
+            );
+
+            app.manage(AppState {
+                storage,
+                vault: vault as Arc<dyn SecretVault>,
+            });
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             commands::agents::list_agents,
             commands::agents::get_agent,

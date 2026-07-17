@@ -1,9 +1,13 @@
 {
   "identifier": "default",
-  "description": "Default capabilities for LocalFlow",
+  "description": "Default capabilities for LocalFlow desktop commands",
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "shell:allow-open"
+    "core:window:default",
+    "shell:allow-open",
+    "core:event:default",
+    "core:event:allow-emit",
+    "core:event:allow-listen"
   ]
 }

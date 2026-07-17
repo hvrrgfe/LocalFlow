@@ -1,3 +1,5 @@
+﻿mod encrypted_vault;
+
 use localflow_core::error::{CoreError, CoreResult};
 
 /// Trait for secret storage backends.
@@ -14,6 +16,8 @@ pub trait SecretVault: Send + Sync {
     /// Check if a secret exists.
     fn exists(&self, key: &str) -> CoreResult<bool>;
 }
+
+pub use encrypted_vault::EncryptedFileVault;
 
 /// An in-memory secret vault for testing and development.
 /// **Do not use in production.** Secrets are stored in plaintext in memory.
