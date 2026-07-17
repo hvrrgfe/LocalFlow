@@ -3,6 +3,9 @@ target/
 *.rs.bk
 Cargo.lock
 
+# Build toolchain (environment-specific)
+.cargo/
+
 # Node
 node_modules/
 apps/desktop/dist/
@@ -36,6 +39,13 @@ apps/mobile/android/local.properties
 apps/mobile/android/key.properties
 *.keystore
 *.jks
+apps/mobile/android/app/src/main/jniLibs/
 
 # Logs
 *.log
+
+# Secrets (never commit)
+**/secrets*
+**/*.key
+**/*.pem
+**/*.cert
