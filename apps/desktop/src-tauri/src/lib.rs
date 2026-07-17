@@ -1,4 +1,4 @@
-﻿mod commands;
+mod commands;
 
 use localflow_secret_vault::{EncryptedFileVault, SecretVault};
 use localflow_storage::StorageEngine;
@@ -79,6 +79,7 @@ pub fn run() {
             commands::secrets::check_secret_exists,
             commands::security::get_audit_logs,
             commands::security::validate_url,
+            commands::openapi::import_openapi,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

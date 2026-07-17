@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useProviders, useSecrets } from "../hooks/useApi";
 import * as api from "../lib/api";
 
@@ -10,6 +10,9 @@ export default function ApiManagementPage() {
   const [newSecret, setNewSecret] = useState({ key: "", value: "" });
   const [savingProvider, setSavingProvider] = useState(false);
   const [savingSecret, setSavingSecret] = useState(false);
+  const [openApiDoc, setOpenApiDoc] = useState("");
+  const [openApiResult, setOpenApiResult] = useState<any>(null);
+  const [importingOpenApi, setImportingOpenApi] = useState(false);
 
   const handleSaveProvider = async () => {
     if (!newProvider.id.trim() || !newProvider.name.trim() || !newProvider.baseUrl.trim()) {
@@ -65,6 +68,20 @@ export default function ApiManagementPage() {
     }
   };
 
+  const handleImportOpenApi = async () => {
+    if (!openApiDoc.trim()) { alert("请粘贴 OpenAPI 文档"); return; }
+    setImportingOpenApi(true);
+    setOpenApiResult(null);
+    try {
+      const result = await api.importOpenApi(openApiDoc);
+      setOpenApiResult(result);
+    } catch (e) {
+      setOpenApiResult({ valid: false, message: String(e), endpoints: [] });
+    } finally {
+      setImportingOpenApi(false);
+    }
+  };
+
   if (loadingProviders && loadingSecrets) return <div className="page-loading">加载中...</div>;
 
   return (
@@ -77,24 +94,9 @@ export default function ApiManagementPage() {
         <h2>API Provider</h2>
         <div className="manage-section">
           <div className="form-row">
-            <input
-              type="text"
-              placeholder="Provider ID (如 deepseek)"
-              value={newProvider.id}
-              onChange={(e) => setNewProvider({ ...newProvider, id: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="名称 (如 DeepSeek)"
-              value={newProvider.name}
-              onChange={(e) => setNewProvider({ ...newProvider, name: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Base URL (如 https://api.deepseek.com/v1)"
-              value={newProvider.baseUrl}
-              onChange={(e) => setNewProvider({ ...newProvider, baseUrl: e.target.value })}
-            />
+            <input type="text" placeholder="Provider ID (如 deepseek)" value={newProvider.id} onChange={(e) => setNewProvider({ ...newProvider, id: e.target.value })} />
+            <input type="text" placeholder="名称 (如 DeepSeek)" value={newProvider.name} onChange={(e) => setNewProvider({ ...newProvider, name: e.target.value })} />
+            <input type="text" placeholder="Base URL (如 https://api.deepseek.com/v1)" value={newProvider.baseUrl} onChange={(e) => setNewProvider({ ...newProvider, baseUrl: e.target.value })} />
             <button className="btn btn-primary" onClick={handleSaveProvider} disabled={savingProvider}>
               {savingProvider ? "保存中..." : "添加"}
             </button>
@@ -103,13 +105,7 @@ export default function ApiManagementPage() {
           {providers && providers.length > 0 ? (
             <table className="table">
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>名称</th>
-                  <th>Base URL</th>
-                  <th>API Key</th>
-                  <th>操作</th>
-                </tr>
+                <tr><th>ID</th><th>名称</th><th>Base URL</th><th>API Key</th><th>操作</th></tr>
               </thead>
               <tbody>
                 {providers.map((p) => (
@@ -118,19 +114,13 @@ export default function ApiManagementPage() {
                     <td>{p.name}</td>
                     <td className="font-mono">{p.base_url}</td>
                     <td>{p.has_api_key ? "✓ 已配置" : "✗ 未配置"}</td>
-                    <td>
-                      <button className="btn btn-sm btn-danger" onClick={() => handleDeleteProvider(p.id)}>
-                        删除
-                      </button>
-                    </td>
+                    <td><button className="btn btn-sm btn-danger" onClick={() => handleDeleteProvider(p.id)}>删除</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <div className="empty-state">
-              <p>尚未配置任何 API Provider。</p>
-            </div>
+            <div className="empty-state"><p>尚未配置任何 API Provider。</p></div>
           )}
         </div>
       </section>
@@ -140,18 +130,8 @@ export default function ApiManagementPage() {
         <p className="text-muted">API Key 加密存储，前端无法读取已保存的值。</p>
         <div className="manage-section">
           <div className="form-row">
-            <input
-              type="text"
-              placeholder="Key (如 provider/deepseek)"
-              value={newSecret.key}
-              onChange={(e) => setNewSecret({ ...newSecret, key: e.target.value })}
-            />
-            <input
-              type="password"
-              placeholder="API Key 值"
-              value={newSecret.value}
-              onChange={(e) => setNewSecret({ ...newSecret, value: e.target.value })}
-            />
+            <input type="text" placeholder="Key (如 provider/deepseek)" value={newSecret.key} onChange={(e) => setNewSecret({ ...newSecret, key: e.target.value })} />
+            <input type="password" placeholder="API Key 值" value={newSecret.value} onChange={(e) => setNewSecret({ ...newSecret, value: e.target.value })} />
             <button className="btn btn-primary" onClick={handleSaveSecret} disabled={savingSecret}>
               {savingSecret ? "保存中..." : "保存"}
             </button>
@@ -160,30 +140,58 @@ export default function ApiManagementPage() {
           {secrets && secrets.length > 0 ? (
             <table className="table">
               <thead>
-                <tr>
-                  <th>Key</th>
-                  <th>状态</th>
-                  <th>操作</th>
-                </tr>
+                <tr><th>Key</th><th>状态</th><th>操作</th></tr>
               </thead>
               <tbody>
                 {secrets.map((s) => (
                   <tr key={s.key}>
                     <td className="font-mono">{s.key}</td>
                     <td>{s.exists ? "✓ 已配置" : "✗ 不存在"}</td>
-                    <td>
-                      <button className="btn btn-sm btn-danger" onClick={() => handleDeleteSecret(s.key)}>
-                        删除
-                      </button>
-                    </td>
+                    <td><button className="btn btn-sm btn-danger" onClick={() => handleDeleteSecret(s.key)}>删除</button></td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <div className="empty-state">
-              <p>尚未配置任何 API Key。</p>
-            </div>
+            <div className="empty-state"><p>尚未配置任何 API Key。</p></div>
+          )}
+        </div>
+      </section>
+
+      <section className="section">
+        <h2>OpenAPI 导入</h2>
+        <p className="text-muted">粘贴 OpenAPI 3 JSON/YAML 文档以自动生成工具定义。</p>
+        <div className="manage-section">
+          <textarea className="font-mono" rows={8} style={{ width: "100%", marginBottom: 8 }}
+            placeholder="粘贴 OpenAPI 3 JSON/YAML 文档..."
+            value={openApiDoc} onChange={(e) => setOpenApiDoc(e.target.value)}
+          />
+          <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <button className="btn btn-primary" onClick={handleImportOpenApi} disabled={importingOpenApi}>
+              {importingOpenApi ? "解析中..." : "导入并解析"}
+            </button>
+            {openApiResult && (
+              <span style={{ color: openApiResult.valid ? "var(--success)" : "var(--danger)" }}>
+                {openApiResult.message}
+              </span>
+            )}
+          </div>
+          {openApiResult && openApiResult.endpoints && openApiResult.endpoints.length > 0 && (
+            <table className="table" style={{ marginTop: 12 }}>
+              <thead>
+                <tr><th>方法</th><th>路径</th><th>操作名称</th><th>描述</th></tr>
+              </thead>
+              <tbody>
+                {openApiResult.endpoints.map((ep: any, i: number) => (
+                  <tr key={i}>
+                    <td><code>{ep.method}</code></td>
+                    <td className="font-mono">{ep.path}</td>
+                    <td>{ep.name}</td>
+                    <td className="text-muted">{ep.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       </section>

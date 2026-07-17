@@ -120,6 +120,16 @@ export async function getAuditLogs(limit?: number): Promise<AuditLog[]> {
   return invoke("get_audit_logs", { limit: limit ?? null });
 }
 
+export interface OpenApiImportResult {
+  valid: boolean;
+  message: string;
+  endpoints: { name: string; description: string; method: string; path: string }[];
+}
+
+export async function importOpenApi(rawDocument: string): Promise<OpenApiImportResult> {
+  return invoke("import_openapi", { rawDocument });
+}
+
 export async function validateUrl(url: string): Promise<UrlValidationResult> {
   return invoke("validate_url", { url });
 }

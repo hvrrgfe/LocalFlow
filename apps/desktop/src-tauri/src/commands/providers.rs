@@ -1,6 +1,5 @@
 use crate::AppState;
 use localflow_core::error::CoreResult;
-use localflow_secret_vault::SecretVault;
 use serde::Serialize;
 use tauri::State;
 
