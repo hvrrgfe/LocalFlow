@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from "react-router-dom";
 
 const navItems = [
+  { path: "/chat", label: "对话" },
   { path: "/agents", label: "Agent" },
   { path: "/providers", label: "API 管理" },
   { path: "/runs", label: "运行日志" },

@@ -80,6 +80,7 @@ pub fn run() {
             commands::security::get_audit_logs,
             commands::security::validate_url,
             commands::openapi::import_openapi,
+            commands::chat::chat_with_agent,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

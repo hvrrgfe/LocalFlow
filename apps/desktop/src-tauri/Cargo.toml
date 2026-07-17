@@ -21,6 +21,7 @@ localflow-core = { path = "../../../crates/core" }
 localflow-storage = { path = "../../../crates/storage" }
 localflow-secret-vault = { path = "../../../crates/secret-vault" }
 localflow-security = { path = "../../../crates/security" }
+localflow-model-providers = { path = "../../../crates/model-providers" }
 localflow-audit = { path = "../../../crates/audit" }
 localflow-api-tools = { path = "../../../crates/api-tools" }
 localflow-workflow-engine = { path = "../../../crates/workflow-engine" }

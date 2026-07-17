@@ -1,4 +1,4 @@
-﻿import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import AgentListPage from "./pages/AgentListPage";
@@ -6,6 +6,7 @@ import AgentEditorPage from "./pages/AgentEditorPage";
 import WorkflowEditorPage from "./pages/WorkflowEditorPage";
 import ApiManagementPage from "./pages/ApiManagementPage";
 import RunLogsPage from "./pages/RunLogsPage";
+import ChatPage from "./pages/ChatPage";
 import SecuritySettingsPage from "./pages/SecuritySettingsPage";
 import "./index.css";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/providers" element={<ApiManagementPage />} />
           <Route path="/runs" element={<RunLogsPage />} />
           <Route path="/runs/:workflowId" element={<RunLogsPage />} />
+          <Route path="/chat" element={<ChatPage />} />
           <Route path="/security" element={<SecuritySettingsPage />} />
         </Route>
       </Routes>

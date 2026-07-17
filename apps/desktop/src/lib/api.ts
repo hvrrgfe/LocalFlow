@@ -126,6 +126,10 @@ export interface OpenApiImportResult {
   endpoints: { name: string; description: string; method: string; path: string }[];
 }
 
+export async function chatWithAgent(agentId: string, message: string): Promise<{ content: string; model: string; usage: { prompt_tokens: number; completion_tokens: number } | null }> {
+  return invoke("chat_with_agent", { agentId, message });
+}
+
 export async function importOpenApi(rawDocument: string): Promise<OpenApiImportResult> {
   return invoke("import_openapi", { rawDocument });
 }
