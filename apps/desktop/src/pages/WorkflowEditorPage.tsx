@@ -160,7 +160,7 @@ function WorkflowCanvas({ workflowId }: { workflowId: string }) {
   return (
     <div className="page">
       <div className="page-header">
-        <h1>工作流: {wf.name}</h1>
+        <h1>工作流 {wf.name}</h1>
         <div className="page-actions">
           <button className="btn btn-primary" onClick={handleRun} disabled={running}>
             {running ? "运行中..." : "运行"}

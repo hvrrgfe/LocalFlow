@@ -71,7 +71,7 @@ export default function RunLogsPage() {
       </div>
 
       <div className="form-row">
-        <label>选择工作流:</label>
+        <label>选择工作流</label>
         <select value={selectedWf} onChange={(e) => setSelectedWf(e.target.value)}>
           <option value="">-- 全部 --</option>
           {allWorkflows?.map((wf) => (
@@ -89,19 +89,16 @@ export default function RunLogsPage() {
           {runs.map((run) => (
             <div key={run.id} className="run-card" onClick={() => toggleExpand(run.id)}>
               <div className="run-card-header">
-                <span className={`run-status-dot ${statusClass(run.status)}`} />
-
+                <span className={"run-status-dot " + statusClass(run.status)} />
                 <span className="run-status-label">{run.status}</span>
                 <span className="run-time">
                   {run.started_at ? new Date(run.started_at).toLocaleString() : "未开始"}
                 </span>
                 {run.completed_at && (
                   <span className="run-duration">
-                    (
-                    {Math.round(
+                    ({Math.round(
                       (new Date(run.completed_at).getTime() - new Date(run.started_at!).getTime()) / 1000
-                    )}
-                    s)
+                    )}s)
                   </span>
                 )}
               </div>

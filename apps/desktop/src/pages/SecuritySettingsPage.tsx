@@ -58,7 +58,7 @@ export default function SecuritySettingsPage() {
 
       <section className="section">
         <h2>安全审计日志</h2>
-        <p className="text-muted">记录所有敏感操作，日志不会泄露密钥。</p>
+        <p className="text-muted">记录所有敏感操作，日志不会泄漏密钥。</p>
 
         {loading ? (
           <div className="page-loading">加载中...</div>
